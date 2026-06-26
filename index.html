@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="서울중앙교회 QT터링 — 지혜를 잇다. 대학/청년부 튜터가 초등·중·고등부에게 1:1 학습을 도와주는 신앙 기반 튜터링 프로그램입니다.">
+  <meta property="og:title" content="QT터링 — 지혜를 잇다 | 서울중앙교회">
+  <meta property="og:description" content="대학/청년부 튜터와 다음 세대를 잇는 서울중앙교회 교육 사역">
+  <meta property="og:type" content="website">
+  <title>QT터링 — 지혜를 잇다 | 서울중앙교회</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════
+     네비게이션
+══════════════════════════════════════════════════════ -->
+<nav id="navbar">
+  <div class="container nav-inner">
+    <a href="#hero" class="nav-logo">
+      <div class="logo-icon">✝</div>
+      <span>QT터링</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about">사역 안내</a></li>
+      <li><a href="#tutors">튜터 리스트</a></li>
+      <li><a href="#apply-tutor">튜터 신청</a></li>
+      <li><a href="#apply-tutee">수업 신청</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#contact">문의</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="#apply-tutor" class="btn btn-outline btn-sm">튜터 신청</a>
+      <a href="#apply-tutee" class="btn btn-primary btn-sm">수업 받기</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="메뉴 열기">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- 모바일 메뉴 -->
+<div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true">
+  <button class="mobile-close" id="mobileClose" aria-label="닫기">✕</button>
+  <a href="#about">사역 안내</a>
+  <a href="#tutors">튜터 리스트</a>
+  <a href="#apply-tutor">튜터 신청</a>
+  <a href="#apply-tutee">수업 신청</a>
+  <a href="#faq">FAQ</a>
+  <a href="#contact">문의</a>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     히어로
+══════════════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-particles"></div>
+  <div class="hero-cross">
+    <svg viewBox="0 0 200 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="80" y="0" width="40" height="300" fill="white"/>
+      <rect x="0" y="80" width="200" height="40" fill="white"/>
+    </svg>
+  </div>
+  <div class="container hero-content">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      서울중앙교회 · 대학/청년부 사역
+    </div>
+    <h1 class="hero-title">
+      지혜를<br><span class="highlight">잇다</span>
+    </h1>
+    <p class="hero-subtitle">QT터링 (QTutoring) — 믿음으로 가르치는 1:1 튜터링</p>
+    <p class="hero-desc">
+      대학·청년부 지체들이 초등 5학년부터 고등학생까지<br>
+      국어·영어·수학과 악기 레슨을 가르쳐 드립니다.<br>
+      모든 수업은 <strong style="color:var(--gold-300)">15분 QT나눔</strong>으로 시작합니다.
+    </p>
+    <div class="hero-cta">
+      <a href="#apply-tutor" class="btn btn-primary">✝ 튜터로 섬기기</a>
+      <a href="#apply-tutee" class="btn btn-outline">🎓 수업 받기</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-number">1:1</span>
+        <span class="stat-label">개인 맞춤 수업</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">15분</span>
+        <span class="stat-label">QT나눔 필수</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">7과목+</span>
+        <span class="stat-label">국·영·수·악기 등</span>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M12 5v14M5 12l7 7 7-7"/>
+    </svg>
+    <span>아래로</span>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     사역 안내
+══════════════════════════════════════════════════════ -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div>
+        <span class="section-label reveal">사역 안내</span>
+        <div class="divider reveal"></div>
+        <h2 class="section-title reveal">믿음의 선배가<br>지식을 나눕니다</h2>
+        <p class="section-desc reveal">
+          QT터링은 단순한 과외가 아닙니다. 대학·청년부가 다음 세대의 공부와 신앙 모두를 함께 나누는 서울중앙교회의 교육 사역입니다.
+        </p>
+        <div class="about-features">
+          <div class="feature-card reveal reveal-delay-1">
+            <div class="feature-icon">📚</div>
+            <h4>학습 지원</h4>
+            <p>국어·영어·수학·과학·사회·한국사 전 과목 지원</p>
+          </div>
+          <div class="feature-card reveal reveal-delay-2">
+            <div class="feature-icon">🎵</div>
+            <h4>악기 레슨</h4>
+            <p>보컬·건반·드럼·기타·베이스·엔지니어링</p>
+          </div>
+          <div class="feature-card reveal reveal-delay-3">
+            <div class="feature-icon">🏛️</div>
+            <h4>교회 내 안심 환경</h4>
+            <p>교회 지정 공간에서 안전하게 진행</p>
+          </div>
+          <div class="feature-card reveal reveal-delay-4">
+            <div class="feature-icon">🤝</div>
+            <h4>자율 사례비 협의</h4>
+            <p>시세보다 저렴하게 튜터-튜티 간 직접 협의</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="qt-rule-banner reveal">
+          <div class="rule-label">✝ 핵심 규칙 — QT나눔</div>
+          <h3>수업 시작 후 첫 15분은<br>반드시 QT나눔 시간입니다</h3>
+          <p>
+            모든 튜터는 수업 시작과 함께 15분 동안 말씀과 삶을 나누는 QT(Quiet Time) 나눔을 진행해야 합니다. 이 시간은 학습 이전에 신앙의 선배로서 다음 세대를 섬기는 QT터링의 핵심 정신입니다.
+          </p>
+          <p style="margin-top:.5rem">
+            튜터와 튜티가 함께 묵상하고, 서로의 삶을 나누며, 그리스도 안에서 성장하는 시간을 소중히 여깁니다.
+          </p>
+          <div class="warning-badge">
+            ⚠️ 이 규칙을 지키지 않을 경우 튜터 자격이 즉시 박탈됩니다
+          </div>
+        </div>
+        <div style="margin-top:1.25rem;padding:1.25rem;background:var(--white);border-radius:var(--radius-md);border:1px solid var(--gray-100)" class="reveal">
+          <h4 style="font-size:.9rem;font-weight:700;color:var(--navy-900);margin-bottom:.75rem">📋 대상 안내</h4>
+          <div style="display:flex;flex-direction:column;gap:.4rem">
+            <div style="display:flex;justify-content:space-between;font-size:.85rem;padding:.4rem 0;border-bottom:1px solid var(--gray-100)">
+              <span style="color:var(--gray-500)">튜터 대상</span>
+              <span style="font-weight:600;color:var(--navy-900)">대학생 · 청년부</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:.85rem;padding:.4rem 0;border-bottom:1px solid var(--gray-100)">
+              <span style="color:var(--gray-500)">튜티 대상</span>
+              <span style="font-weight:600;color:var(--navy-900)">초등 5학년 ~ 고3</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:.85rem;padding:.4rem 0;border-bottom:1px solid var(--gray-100)">
+              <span style="color:var(--gray-500)">수업 장소</span>
+              <span style="font-weight:600;color:var(--navy-900)">서울중앙교회 내</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:.85rem;padding:.4rem 0">
+              <span style="color:var(--gray-500)">사례비</span>
+              <span style="font-weight:600;color:var(--navy-900)">튜터-튜티 자율 협의</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     튜터 리스트
+══════════════════════════════════════════════════════ -->
+<section id="tutors">
+  <div class="container">
+    <span class="section-label reveal">튜터 리스트</span>
+    <div class="divider reveal"></div>
+    <h2 class="section-title light reveal">함께할 튜터를<br>만나보세요</h2>
+    <p class="section-desc light reveal">승인된 튜터들의 프로필을 과목별로 찾아볼 수 있습니다.</p>
+    <div class="filter-tabs" id="filter-tabs"></div>
+    <div class="tutors-grid" id="tutors-grid">
+      <!-- JS로 렌더링 -->
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     튜터 신청 폼
+══════════════════════════════════════════════════════ -->
+<section id="apply-tutor">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:2.5rem">
+      <span class="section-label reveal">튜터 신청</span>
+      <div class="divider reveal" style="margin:0 auto 1rem"></div>
+      <h2 class="section-title reveal">재능을 나눠<br>다음 세대를 섬기세요</h2>
+      <p class="section-desc reveal" style="margin:0 auto">
+        대학·청년부 지체라면 누구나 신청할 수 있습니다.<br>관리자 승인 후 리스트에 표시됩니다.
+      </p>
+    </div>
+    <div class="form-container reveal">
+      <div class="form-title">튜터 신청서</div>
+      <div class="form-subtitle">모든 필수 항목(*)을 작성해 주세요. 신청 후 담당자가 검토합니다.</div>
+
+      <form id="tutor-form" novalidate>
+        <!-- 기본 정보 -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="tutor-name">이름 <span class="required">*</span></label>
+            <input type="text" id="tutor-name" class="input" placeholder="홍길동">
+            <div class="field-error" id="tutor-name-error">이름을 입력해 주세요.</div>
+          </div>
+          <div class="form-group">
+            <label for="tutor-university">대학교 <span class="required">*</span></label>
+            <input type="text" id="tutor-university" class="input" placeholder="서울대학교">
+            <div class="field-error" id="tutor-university-error">대학교를 입력해 주세요.</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="tutor-grade">학년 <span class="required">*</span></label>
+          <select id="tutor-grade" class="select">
+            <option value="">학년 선택</option>
+          </select>
+          <div class="field-error" id="tutor-grade-error">학년을 선택해 주세요.</div>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <!-- 과목 선택 -->
+        <div class="form-group">
+          <label>가르칠 수 있는 과목 <span class="required">*</span> (복수 선택 가능)</label>
+          <div class="checkbox-grid" id="tutor-subjects"></div>
+          <div class="field-error" id="tutor-subjects-error">과목을 하나 이상 선택해 주세요.</div>
+        </div>
+
+        <!-- 악기 선택 (조건부 노출) -->
+        <div class="form-group" id="instrument-section" style="display:none">
+          <label>가르칠 수 있는 악기 (복수 선택 가능)</label>
+          <div class="checkbox-grid" id="tutor-instruments"></div>
+        </div>
+
+        <!-- 가능 요일 -->
+        <div class="form-group">
+          <label>가능한 요일 <span class="required">*</span></label>
+          <div class="checkbox-grid" id="tutor-days"></div>
+          <div class="field-error" id="tutor-days-error">요일을 하나 이상 선택해 주세요.</div>
+        </div>
+
+        <!-- 가능 시간 -->
+        <div class="form-group">
+          <label for="tutor-times">가능한 시간대 <span class="required">*</span></label>
+          <input type="text" id="tutor-times" class="input" placeholder="예) 오후 2시 ~ 6시, 저녁 협의 가능">
+          <div class="field-error" id="tutor-times-error">가능한 시간대를 입력해 주세요.</div>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <!-- 연락처 -->
+        <div class="form-group">
+          <label>연락 방법 <span class="required">*</span></label>
+          <div class="radio-group">
+            <div class="radio-item">
+              <input type="radio" id="contact-kakao" name="tutor_contact_type" value="kakao">
+              <label for="contact-kakao">💬 카카오 오픈채팅</label>
+            </div>
+            <div class="radio-item">
+              <input type="radio" id="contact-phone" name="tutor_contact_type" value="phone">
+              <label for="contact-phone">📞 전화번호</label>
+            </div>
+          </div>
+          <div class="field-error" id="contact-type-error">연락 방법을 선택해 주세요.</div>
+        </div>
+        <div class="form-group">
+          <label for="tutor-contact-value">연락처 <span class="required">*</span></label>
+          <input type="text" id="tutor-contact-value" class="input" placeholder="카카오 오픈채팅 링크 또는 전화번호">
+          <div class="field-error" id="tutor-contact-value-error">연락처를 입력해 주세요.</div>
+        </div>
+
+        <!-- 자기소개 -->
+        <div class="form-group">
+          <label for="tutor-bio">자기소개</label>
+          <textarea id="tutor-bio" class="textarea" placeholder="간단히 자신을 소개해 주세요. (학과, 특기, 지원 동기 등)"></textarea>
+        </div>
+
+        <!-- 프로필 사진 -->
+        <div class="form-group">
+          <label>프로필 사진 (선택, 최대 5MB)</label>
+          <div class="image-upload-area">
+            <input type="file" id="tutor-image" accept="image/jpeg,image/png,image/webp">
+            <div id="upload-text">
+              <div class="upload-icon">📷</div>
+              <div class="upload-text">클릭하거나 사진을 드래그하세요</div>
+              <div class="upload-text" style="font-size:.75rem;margin-top:.25rem">JPG, PNG, WEBP 지원</div>
+            </div>
+            <img id="image-preview" class="image-preview" alt="미리보기">
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <!-- QT 동의 -->
+        <div class="form-group">
+          <div class="qt-agreement-box">
+            <div class="agree-header">✝ QT나눔 15분 규칙 동의 (필수)</div>
+            <p>
+              저는 모든 수업 시작 후 첫 15분을 QT(말씀과 삶) 나눔 시간으로 반드시 진행할 것을 동의합니다. 이 규칙을 지키지 않을 경우 튜터 자격이 즉시 박탈됨을 이해합니다.
+            </p>
+            <label class="agree-check-row" for="qt-agree">
+              <input type="checkbox" id="qt-agree">
+              <span>위 내용을 이해하고 동의합니다</span>
+            </label>
+          </div>
+          <div class="field-error" id="qt-agree-error">QT나눔 규칙에 동의해 주세요.</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" id="tutor-submit-btn" style="margin-top:.5rem">
+          튜터 신청서 제출하기 →
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     수업 희망 신청 폼
+══════════════════════════════════════════════════════ -->
+<section id="apply-tutee">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:2.5rem">
+      <span class="section-label reveal">수업 신청</span>
+      <div class="divider reveal" style="margin:0 auto 1rem"></div>
+      <h2 class="section-title reveal">배움을 시작해<br>보세요</h2>
+      <p class="section-desc reveal" style="margin:0 auto">
+        원하는 튜터와 과목을 선택해 신청하면<br>담당자가 매칭을 도와드립니다.
+      </p>
+    </div>
+    <div class="form-container reveal">
+      <div class="form-title">수업 희망 신청서</div>
+      <div class="form-subtitle">신청 후 담당자가 연락드립니다. 사례비는 튜터와 직접 협의하시면 됩니다.</div>
+
+      <form id="tutee-form" novalidate>
+        <!-- 학생 정보 -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="tutee-student-name">학생 이름 <span class="required">*</span></label>
+            <input type="text" id="tutee-student-name" class="input" placeholder="홍길동">
+          </div>
+          <div class="form-group">
+            <label for="tutee-school">학교 <span class="required">*</span></label>
+            <input type="text" id="tutee-school" class="input" placeholder="서울중앙중학교">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="tutee-grade">학년 <span class="required">*</span></label>
+          <select id="tutee-grade" class="select">
+            <option value="">학년 선택</option>
+          </select>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <!-- 희망 과목 -->
+        <div class="form-group">
+          <label>희망 과목 <span class="required">*</span> (복수 선택 가능)</label>
+          <div class="checkbox-grid" id="tutee-subjects"></div>
+          <div class="field-error" id="tutee-subjects-error">과목을 하나 이상 선택해 주세요.</div>
+        </div>
+
+        <!-- 특정 튜터 지정 -->
+        <div class="form-group">
+          <label for="tutee-tutor-select">원하는 튜터 (선택사항)</label>
+          <select id="tutee-tutor-select" class="select">
+            <option value="">-- 특정 튜터 지정 안함 --</option>
+          </select>
+        </div>
+
+        <!-- 희망 요일 -->
+        <div class="form-group">
+          <label>희망 요일</label>
+          <div class="checkbox-grid" id="tutee-days"></div>
+        </div>
+
+        <!-- 희망 시간 -->
+        <div class="form-group">
+          <label for="tutee-times">희망 시간대</label>
+          <input type="text" id="tutee-times" class="input" placeholder="예) 오후 3시 ~ 5시">
+        </div>
+
+        <div class="form-divider"></div>
+
+        <!-- 연락처 -->
+        <div class="form-group">
+          <label>연락처 방법 <span class="required">*</span></label>
+          <div class="radio-group">
+            <div class="radio-item">
+              <input type="radio" id="tutee-kakao" name="tutee_contact_type" value="kakao">
+              <label for="tutee-kakao">💬 카카오 오픈채팅</label>
+            </div>
+            <div class="radio-item">
+              <input type="radio" id="tutee-phone" name="tutee_contact_type" value="phone">
+              <label for="tutee-phone">📞 전화번호</label>
+            </div>
+          </div>
+          <div class="field-error" id="tutee-contact-type-error">연락 방법을 선택해 주세요.</div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="tutee-contact-name">보호자 / 학생 이름 <span class="required">*</span></label>
+            <input type="text" id="tutee-contact-name" class="input" placeholder="홍부모">
+          </div>
+          <div class="form-group">
+            <label for="tutee-contact-value">연락처 <span class="required">*</span></label>
+            <input type="text" id="tutee-contact-value" class="input" placeholder="카카오 링크 또는 전화번호">
+          </div>
+        </div>
+
+        <!-- 추가 메시지 -->
+        <div class="form-group">
+          <label for="tutee-message">추가 요청사항</label>
+          <textarea id="tutee-message" class="textarea" placeholder="수업 관련 특별한 요청이나 궁금한 점을 자유롭게 적어주세요."></textarea>
+        </div>
+
+        <div style="padding:.9rem;background:var(--gold-50);border-radius:var(--radius-md);border-left:3px solid var(--gold-400);margin-bottom:1rem">
+          <p style="font-size:.82rem;color:var(--gray-700);line-height:1.7">
+            💡 <strong>사례비 안내:</strong> 수업료는 튜터와 직접 협의하시면 됩니다. 시세보다 저렴하게 책정되며, 교회 정신에 맞게 합리적으로 결정됩니다.
+          </p>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" id="tutee-submit-btn">
+          수업 신청하기 →
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     FAQ
+══════════════════════════════════════════════════════ -->
+<section id="faq">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:2.5rem">
+      <span class="section-label reveal">자주 묻는 질문</span>
+      <div class="divider reveal" style="margin:0 auto 1rem"></div>
+      <h2 class="section-title light reveal">궁금한 점이<br>있으신가요?</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <button class="faq-question">
+          QT나눔 15분이 왜 필수인가요?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            QT터링은 단순한 과외가 아니라 신앙 기반 교육 사역입니다. 수업 시작 전 15분 동안 말씀을 함께 읽고, 삶을 나누는 시간을 가짐으로써 튜터와 튜티가 그리스도 안에서 함께 성장합니다. 이는 QT터링의 핵심 정신이며, 모든 튜터가 동의하고 지켜야 할 규칙입니다.
+          </div>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question">
+          사례비는 어떻게 결정되나요?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            사례비는 튜터와 튜티(또는 보호자) 간 자율 협의로 결정됩니다. 시중 과외 시세보다 저렴하게 책정하는 것을 권장하며, 교회 정신에 맞게 합리적으로 결정해 주시면 됩니다. 결제는 당사자 간 직접 진행합니다.
+          </div>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question">
+          수업 장소는 어디인가요?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            모든 수업은 서울중앙교회 내 지정 공간에서 진행됩니다. 투명한 환경에서 안전하게 수업이 이루어질 수 있도록 개방된 공간을 사용합니다. 구체적인 장소는 담당자에게 문의해 주세요.
+          </div>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question">
+          튜터 신청 후 언제부터 활동할 수 있나요?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            튜터 신청서 제출 후 담당자의 검토 및 승인 과정을 거칩니다. 보통 3~5 영업일 내에 연락을 드리며, 승인 후 프로필이 리스트에 공개됩니다. 문의는 이메일(difains2@gmail.com)로 해주세요.
+          </div>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question">
+          악기 레슨은 어떤 악기가 가능한가요?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            현재 보컬, 건반, 드럼, 어쿠스틱 기타, 일렉기타, 베이스기타, 엔지니어링 레슨이 가능합니다. 악기 레슨의 경우 장소 및 장비 관련하여 사전 협의가 필요할 수 있으니 담당자에게 먼저 문의해 주세요.
+          </div>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question">
+          교회 성도가 아니어도 튜티 신청이 가능한가요?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            QT터링은 기본적으로 서울중앙교회 가족들을 위한 사역입니다. 다만, 관심이 있으시다면 담당자에게 별도로 문의해 주시면 검토 후 안내해 드리겠습니다.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     문의
+══════════════════════════════════════════════════════ -->
+<section id="contact">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:2rem">
+      <span class="section-label reveal">문의하기</span>
+      <div class="divider reveal" style="margin:0 auto"></div>
+    </div>
+    <div class="contact-card reveal">
+      <h3>궁금한 점을 물어보세요</h3>
+      <p>QT터링 담당자가 빠르게 답변해 드립니다.</p>
+      <div class="contact-info-list">
+        <div class="contact-info-item">
+          <div class="info-icon">✉️</div>
+          <div>
+            <div class="info-label">이메일</div>
+            <div class="info-value">difains2@gmail.com</div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="info-icon">⛪</div>
+          <div>
+            <div class="info-label">교회</div>
+            <div class="info-value">서울중앙교회 대학/청년부</div>
+          </div>
+        </div>
+      </div>
+      <a href="mailto:difains2@gmail.com" class="btn btn-primary btn-block">
+        ✉️ 이메일 문의하기
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- 푸터 -->
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-logo">
+      <span>✝</span>
+      <span>QT터링 — 지혜를 잇다</span>
+    </div>
+    <div class="footer-copy">© 2024 서울중앙교회 대학/청년부 · QT터링 사역팀</div>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════════════════════
+     튜터 상세 모달
+══════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-label="튜터 상세 정보">
+  <div class="modal">
+    <div class="modal-header">
+      <div></div>
+      <button class="modal-close" id="modal-close" aria-label="닫기">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body">
+      <!-- JS로 렌더링 -->
+    </div>
+  </div>
+</div>
+
+<!-- 토스트 컨테이너 -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- ══════════════════════════════════════════════════════
+     스크립트 로드 순서:
+     1) config.js   — Supabase 키 (gitignore, CI 생성)
+     2) supabase CDN
+     3) supabase-client.js — DB 초기화
+     4) app.js — 메인 로직
+══════════════════════════════════════════════════════ -->
+<script src="js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>

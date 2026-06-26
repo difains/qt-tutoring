@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>관리자 패널 — QT터링 | 서울중앙교회</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+
+<!-- ══════════════════════════════════════════════════════
+     로그인 화면
+══════════════════════════════════════════════════════ -->
+<div id="login-screen" class="admin-login-wrap">
+  <div class="admin-login-card">
+    <div style="text-align:center;margin-bottom:2rem">
+      <div style="font-size:2rem;margin-bottom:.5rem">✝</div>
+      <div class="form-title" style="color:var(--white)">관리자 로그인</div>
+      <p style="font-size:.85rem;color:rgba(255,255,255,.4);margin-top:.3rem">QT터링 사역팀 전용</p>
+    </div>
+    <form id="login-form" novalidate>
+      <div class="form-group">
+        <label style="color:rgba(255,255,255,.7)">이메일</label>
+        <input type="email" id="admin-email" class="input" placeholder="difains2@gmail.com"
+               style="background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12);color:var(--white)">
+      </div>
+      <div class="form-group">
+        <label style="color:rgba(255,255,255,.7)">비밀번호</label>
+        <input type="password" id="admin-password" class="input" placeholder="••••••••"
+               style="background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12);color:var(--white)">
+      </div>
+      <div class="field-error" id="login-error" style="margin-bottom:.75rem"></div>
+      <button type="submit" class="btn btn-primary btn-block" id="login-btn">로그인</button>
+    </form>
+    <p style="text-align:center;margin-top:1.25rem;font-size:.8rem;color:rgba(255,255,255,.25)">
+      관리자 계정은 Supabase Authentication에서 직접 생성합니다.
+    </p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     관리자 대시보드 (로그인 후 표시)
+══════════════════════════════════════════════════════ -->
+<div id="admin-dashboard" class="admin-layout" style="display:none">
+
+  <!-- 사이드바 -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">✝ QT터링 관리자</div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-link active" data-page="dashboard">
+        <span>📊</span> 대시보드
+      </div>
+      <div class="sidebar-link" data-page="tutors-pending">
+        <span>🕐</span> 튜터 승인 대기
+        <span class="sidebar-badge" id="badge-pending">0</span>
+      </div>
+      <div class="sidebar-link" data-page="tutors-all">
+        <span>👨‍🏫</span> 전체 튜터
+      </div>
+      <div class="sidebar-link" data-page="tutee-requests">
+        <span>📋</span> 수업 신청 목록
+        <span class="sidebar-badge" id="badge-requests">0</span>
+      </div>
+      <div class="sidebar-link" data-page="qt-log">
+        <span>📖</span> QT나눔 기록
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="sidebar-link" id="logout-btn" style="width:100%">
+        <span>🚪</span> 로그아웃
+      </button>
+    </div>
+  </aside>
+
+  <!-- 메인 영역 -->
+  <main class="admin-main">
+
+    <!-- 대시보드 홈 -->
+    <div class="admin-page active" id="page-dashboard">
+      <div class="admin-page-title">📊 대시보드</div>
+      <div class="admin-stats-grid" id="stats-grid">
+        <div class="admin-stat-card">
+          <div class="admin-stat-label">전체 튜터 (승인)</div>
+          <div class="admin-stat-value" id="stat-tutors-approved">-</div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="admin-stat-label">승인 대기 튜터</div>
+          <div class="admin-stat-value" id="stat-tutors-pending">-</div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="admin-stat-label">수업 신청 (대기)</div>
+          <div class="admin-stat-value" id="stat-requests-pending">-</div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="admin-stat-label">수업 신청 (매칭됨)</div>
+          <div class="admin-stat-value" id="stat-requests-matched">-</div>
+        </div>
+      </div>
+      <div style="padding:1.5rem;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:var(--radius-md)">
+        <h4 style="color:var(--gold-400);font-size:.9rem;margin-bottom:.5rem">✝ QT나눔 15분 규칙 리마인더</h4>
+        <p style="font-size:.85rem;color:rgba(255,255,255,.5);line-height:1.7">
+          모든 튜터는 수업 시작 후 첫 15분을 QT나눔으로 진행해야 합니다. 규칙 위반 신고가 들어오면 즉시 튜터 자격을 검토하고 필요시 비활성화 처리해 주세요.
+        </p>
+      </div>
+    </div>
+
+    <!-- 튜터 승인 대기 -->
+    <div class="admin-page" id="page-tutors-pending">
+      <div class="admin-page-title">🕐 튜터 승인 대기</div>
+      <div class="admin-table-wrap">
+        <div class="admin-table-header">
+          <h3>승인 대기 중인 튜터 신청</h3>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>이름</th><th>대학교</th><th>과목</th><th>연락처</th><th>신청일</th><th>동의</th><th>처리</th>
+              </tr>
+            </thead>
+            <tbody id="pending-tutors-tbody">
+              <tr><td colspan="7" style="text-align:center;padding:2rem;color:rgba(255,255,255,.3)">로딩 중...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 전체 튜터 -->
+    <div class="admin-page" id="page-tutors-all">
+      <div class="admin-page-title">👨‍🏫 전체 튜터 관리</div>
+      <div class="admin-table-wrap">
+        <div class="admin-table-header">
+          <h3>전체 튜터 목록</h3>
+          <button class="btn btn-sm btn-outline" id="export-tutors-btn" style="border-color:rgba(255,255,255,.3)">📥 CSV 내보내기</button>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>이름</th><th>대학교</th><th>과목/악기</th><th>상태</th><th>등록일</th><th>관리</th>
+              </tr>
+            </thead>
+            <tbody id="all-tutors-tbody">
+              <tr><td colspan="6" style="text-align:center;padding:2rem;color:rgba(255,255,255,.3)">로딩 중...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 수업 신청 목록 -->
+    <div class="admin-page" id="page-tutee-requests">
+      <div class="admin-page-title">📋 수업 신청 목록</div>
+      <div class="admin-table-wrap">
+        <div class="admin-table-header">
+          <h3>전체 수업 희망 신청</h3>
+          <button class="btn btn-sm btn-outline" id="export-requests-btn" style="border-color:rgba(255,255,255,.3)">📥 CSV 내보내기</button>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>학생 이름</th><th>학교/학년</th><th>희망 과목</th><th>지정 튜터</th><th>연락처</th><th>상태</th><th>신청일</th><th>처리</th>
+              </tr>
+            </thead>
+            <tbody id="tutee-requests-tbody">
+              <tr><td colspan="8" style="text-align:center;padding:2rem;color:rgba(255,255,255,.3)">로딩 중...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- QT 기록 -->
+    <div class="admin-page" id="page-qt-log">
+      <div class="admin-page-title">📖 QT나눔 기록</div>
+      <div class="admin-table-wrap" style="margin-bottom:1.5rem">
+        <div class="admin-table-header">
+          <h3>QT나눔 기록 입력</h3>
+        </div>
+        <div style="padding:1.25rem">
+          <div class="form-row">
+            <div class="form-group">
+              <label style="color:rgba(255,255,255,.6)">튜터 선택</label>
+              <select id="qt-tutor-select" class="select" style="background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12);color:var(--white)">
+                <option value="">튜터 선택</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label style="color:rgba(255,255,255,.6)">수업 날짜</label>
+              <input type="date" id="qt-session-date" class="input" style="background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12);color:var(--white)">
+            </div>
+          </div>
+          <div class="form-group">
+            <label style="color:rgba(255,255,255,.6)">간단한 메모 (선택)</label>
+            <textarea id="qt-note" class="textarea" rows="2" placeholder="나눈 말씀이나 메모를 입력하세요." style="background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12);color:var(--white);min-height:60px"></textarea>
+          </div>
+          <button class="btn btn-primary" id="qt-log-submit-btn">QT기록 저장</button>
+        </div>
+      </div>
+      <div class="admin-table-wrap">
+        <div class="admin-table-header"><h3>QT나눔 기록 목록</h3></div>
+        <div style="overflow-x:auto">
+          <table class="admin-table">
+            <thead>
+              <tr><th>튜터</th><th>수업 날짜</th><th>QT 진행</th><th>메모</th><th>기록 시각</th></tr>
+            </thead>
+            <tbody id="qt-log-tbody">
+              <tr><td colspan="5" style="text-align:center;padding:2rem;color:rgba(255,255,255,.3)">로딩 중...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- 토스트 -->
+<div class="toast-container" id="toast-container"></div>
+
+<script src="js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/admin.js"></script>
+
+</body>
+</html>
