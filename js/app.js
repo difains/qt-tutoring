@@ -3,19 +3,16 @@
 /* ================================================================
    상수 & 설정
    ================================================================ */
-const SUBJECTS = ['국어', '영어', '수학', '과학', '사회', '한국사', '악기레슨'];
-const INSTRUMENTS = ['보컬', '건반', '드럼', '어쿠스틱 기타', '일렉기타', '베이스기타', '엔지니어'];
-const DAYS = ['월', '화', '수', '목', '금', '토', '일'];
+// 기본값 (DB 연결 실패 시 폴백)
+window.SUBJECTS    = ['국어', '영어', '수학', '과학', '사회', '한국사', '악기레슨'];
+window.INSTRUMENTS = ['보컬', '건반', '드럼', '어쿠스틱 기타', '일렉기타', '베이스기타', '엔지니어'];
+const DAYS         = ['월', '화', '수', '목', '금', '토', '일'];
 const GRADES_TUTOR = ['대학교 1학년', '대학교 2학년', '대학교 3학년', '대학교 4학년', '대학원생', '졸업생'];
 const GRADES_TUTEE = [
   '초등 5학년', '초등 6학년',
   '중학교 1학년', '중학교 2학년', '중학교 3학년',
   '고등학교 1학년', '고등학교 2학년', '고등학교 3학년'
 ];
-const FILTER_LABELS = {
-  all: '전체', 국어: '국어', 영어: '영어', 수학: '수학',
-  과학: '과학', 사회: '사회', 한국사: '한국사', 악기레슨: '악기레슨'
-};
 
 let allTutors = [];
 let activeFilter = 'all';
@@ -24,11 +21,12 @@ let selectedTutor = null;
 /* ================================================================
    초기화
    ================================================================ */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   initNavbar();
   initParticles();
   initScrollReveal();
   initMobileMenu();
+  await loadSettingsFromDB();   // DB 설정 로드 (완료 후 폼 빌드)
   buildCheckboxGroups();
   buildFilterTabs();
   loadTutors();
@@ -37,6 +35,23 @@ document.addEventListener('DOMContentLoaded', () => {
   initModal();
   initFAQ();
 });
+
+/* ================================================================
+   DB에서 설정 로드 (app_settings 테이블)
+   ================================================================ */
+async function loadSettingsFromDB() {
+  if (!window.db) return; // DB 미연결 시 기본값 유지
+  const { data, error } = await window.db
+    .from('app_settings')
+    .select('*')
+    .eq('is_active', true)
+    .order('sort_order', { ascending: true });
+  if (error || !data) return;
+  const subjects    = data.filter(s => s.category === 'subject').map(s => s.value);
+  const instruments = data.filter(s => s.category === 'instrument').map(s => s.value);
+  if (subjects.length)    window.SUBJECTS    = subjects;
+  if (instruments.length) window.INSTRUMENTS = instruments;
+}
 
 /* ================================================================
    네비게이션
@@ -98,19 +113,16 @@ function initScrollReveal() {
    ================================================================ */
 function buildCheckboxGroups() {
   // 튜터 폼 — 과목
-  buildCheckboxGroup('tutor-subjects', SUBJECTS, 'tutor_subject');
-  // 튜터 폼 — 악기
-  buildCheckboxGroup('tutor-instruments', INSTRUMENTS, 'tutor_instrument');
-  // 튜터 폼 — 요일
-  buildCheckboxGroup('tutor-days', DAYS, 'tutor_day');
-  // 튜티 폼 — 과목
-  buildCheckboxGroup('tutee-subjects', SUBJECTS, 'tutee_subject');
-  // 튜티 폼 — 요일
-  buildCheckboxGroup('tutee-days', DAYS, 'tutee_day');
-  // 튜터 폼 — 학년
-  buildSelectOptions('tutor-grade', GRADES_TUTOR);
-  // 튜티 폼 — 학년
-  buildSelectOptions('tutee-grade', GRADES_TUTEE);
+  buildCheckboxGroup('tutor-subjects',    window.SUBJECTS,    'tutor_subject');
+  buildCheckboxGroup('tutor-instruments', window.INSTRUMENTS, 'tutor_instrument');
+  buildCheckboxGroup('tutor-days',        DAYS,               'tutor_day');
+  buildCheckboxGroup('tutee-subjects',    window.SUBJECTS,    'tutee_subject');
+  buildCheckboxGroup('tutee-days',        DAYS,               'tutee_day');
+  buildSelectOptions('tutor-grade',       GRADES_TUTOR);
+  buildSelectOptions('tutee-grade',       GRADES_TUTEE);
+
+  // 필터 탭도 동적으로 다시 빌드 (DB 설정 반영)
+  buildFilterTabs();
 
   // 과목에 '악기레슨' 선택 시 악기 그룹 표시
   document.querySelectorAll('input[name="tutor_subject"]').forEach(cb => {
@@ -154,7 +166,10 @@ function toggleInstrumentSection() {
 function buildFilterTabs() {
   const container = document.getElementById('filter-tabs');
   if (!container) return;
-  container.innerHTML = Object.entries(FILTER_LABELS).map(([key, label]) => `
+  const FILTER_MAP = { all: '전체' };
+  window.SUBJECTS.forEach(s => { FILTER_MAP[s] = s; });
+  FILTER_MAP['악기레슨'] = '악기레슨'; // 중복 허용
+  container.innerHTML = Object.entries(FILTER_MAP).map(([key, label]) => `
     <button class="filter-tab${key === 'all' ? ' active' : ''}" data-filter="${key}">${label}</button>
   `).join('');
   container.addEventListener('click', e => {
