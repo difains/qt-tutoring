@@ -3,8 +3,8 @@
    서울중앙교회
    ========================================================== */
 
-/* ── 구글 폰트 ─────────────────────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&family=Nanum+Myeongjo:wght@400;700;800&display=swap');
+/* ── 프리텐다드 폰트 ──────────────────────────────────── */
+/* CDN은 index.html / admin.html <link> 태그로 로드 */
 
 /* ── 디자인 토큰 ────────────────────────────────────────── */
 :root {
@@ -39,8 +39,8 @@
   --warning: #d97706;
 
   /* 타이포 */
-  --font-sans:  'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
-  --font-serif: 'Nanum Myeongjo', 'Batang', Georgia, serif;
+  --font-sans:  'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  --font-serif: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
 
   /* 그림자 */
   --shadow-sm:  0 1px 3px rgba(0,0,0,.08);
@@ -1272,3 +1272,51 @@ footer {
   .hero-cta .btn { width: 100%; justify-content: center; }
   .tutors-grid { grid-template-columns: 1fr; }
 }
+
+/* ── 모바일 추가 최적화 ──────────────────────────────────────────── */
+
+/* 터치 타겟 최소 44px */
+.btn, .filter-tab, .faq-question,
+.checkbox-item label, .radio-item label {
+  min-height: 40px;
+}
+.filter-tab { min-height: 36px; }
+
+/* 필터 탭 가로 스크롤 (모바일) */
+.filter-tabs {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+}
+.filter-tabs::-webkit-scrollbar { display: none; }
+.filter-tab { flex-shrink: 0; }
+
+/* 입력 필드 iOS 줌 방지 (font-size 최소 16px) */
+.input, .select, .textarea { font-size: 16px; }
+
+/* 폼 컨테이너 모바일 풀폭 */
+@media (max-width: 640px) {
+  .form-container {
+    padding: 1.25rem 1rem;
+    border-radius: var(--radius-lg);
+    margin: 0 -0.25rem;
+  }
+  .about-features { grid-template-columns: 1fr; }
+  .qt-rule-banner { padding: 1.5rem 1.25rem; }
+  .hero-stats { flex-wrap: wrap; gap: 1rem; }
+  .stat-number { font-size: 1.5rem; }
+  .faq-question { font-size: .88rem; padding: .95rem 1.1rem; }
+  .contact-card { padding: 1.75rem 1.25rem; }
+}
+
+/* 모달 모바일 */
+@media (max-width: 520px) {
+  .modal-overlay { padding: 0; align-items: flex-end; }
+  .modal {
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    max-height: 90vh;
+  }
+}
+
