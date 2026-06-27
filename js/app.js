@@ -64,14 +64,30 @@ function initNavbar() {
 }
 
 function initMobileMenu() {
-  const hamburger = document.getElementById('hamburger');
+  const hamburger  = document.getElementById('hamburger');
   const mobileMenu = document.getElementById('mobileMenu');
   const mobileClose = document.getElementById('mobileClose');
 
-  hamburger?.addEventListener('click', () => mobileMenu.classList.add('open'));
-  mobileClose?.addEventListener('click', () => mobileMenu.classList.remove('open'));
+  function openMenu() {
+    mobileMenu.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  hamburger?.addEventListener('click', openMenu);
+  mobileClose?.addEventListener('click', closeMenu);
+
+  // 메뉴 링크 클릭 시 자동 닫기
   mobileMenu?.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => mobileMenu.classList.remove('open'));
+    a.addEventListener('click', closeMenu);
+  });
+
+  // ESC 키로 닫기
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeMenu();
   });
 }
 
