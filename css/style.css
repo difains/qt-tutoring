@@ -270,12 +270,22 @@ input, textarea, select {
 .mobile-menu a:hover { color: var(--gold-400); }
 .mobile-close {
   position: absolute;
-  top: 1.25rem;
-  right: 1.25rem;
+  top: 1rem;
+  right: 1rem;
   color: var(--white);
   font-size: 1.5rem;
   line-height: 1;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  background: rgba(255,255,255,.08);
+  z-index: 1010;
+  cursor: pointer;
 }
+.mobile-close:hover { background: rgba(255,255,255,.15); }
 
 /* ── 히어로 섹션 ─────────────────────────────────────────── */
 #hero {
@@ -324,7 +334,7 @@ input, textarea, select {
 .hero-content {
   position: relative;
   z-index: 1;
-  padding: 8rem 0 5rem;
+  padding: 7rem 0 4rem;
 }
 .hero-badge {
   display: inline-flex;
@@ -1255,6 +1265,9 @@ footer {
 @media (max-width: 768px) {
   .nav-links, .nav-cta { display: none; }
   .hamburger { display: flex; }
+
+  /* 히어로 상단 여백 최소화 */
+  .hero-content { padding: 5.5rem 0 3rem; }
 
   .about-grid { grid-template-columns: 1fr; gap: 2rem; }
   .about-features { grid-template-columns: 1fr; }
