@@ -2,10 +2,10 @@
 
 /* ================================================================
    상수 — 관리자 자격증명
-   Supabase Auth 계정: admin0421@qt-tutoring.app / 121212
    ================================================================ */
-const ADMIN_ID    = 'admin0421';
-const ADMIN_EMAIL = 'admin0421@qt-tutoring.app'; // Supabase Auth 이메일
+const ADMIN_ID  = 'admin0421';
+const ADMIN_PW  = '121212';
+const SESSION_KEY = 'qt_admin_session';
 
 /* ================================================================
    초기화
@@ -18,65 +18,39 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ================================================================
-   인증 (Supabase Auth — ID/PW 매핑 방식)
+   인증 (순수 클라이언트 세션 방식)
    ================================================================ */
 async function initAuth() {
-  if (!window.db) {
-    showLoginError('데이터베이스 연결 설정이 필요합니다.');
-    return;
-  }
-
   // 기존 세션 확인
-  const { data: { session } } = await window.db.auth.getSession();
-  if (session) {
+  if (sessionStorage.getItem(SESSION_KEY) === '1') {
     document.getElementById('logged-in-id').textContent = ADMIN_ID;
     showDashboard();
   }
 
-  // 상태 변화 자동 감지
-  window.db.auth.onAuthStateChange((_event, session) => {
-    if (session) {
-      document.getElementById('logged-in-id').textContent = ADMIN_ID;
-      showDashboard();
-    } else {
-      showLoginScreen();
-    }
-  });
-
-  // 로그인 폼 제출
-  document.getElementById('login-form').addEventListener('submit', async e => {
+  // 로그인 폼
+  document.getElementById('login-form').addEventListener('submit', e => {
     e.preventDefault();
-    const adminId  = document.getElementById('admin-id').value.trim();
-    const password = document.getElementById('admin-password').value;
+    const inputId = document.getElementById('admin-id').value.trim();
+    const inputPw = document.getElementById('admin-password').value;
 
-    if (!adminId || !password) {
+    if (!inputId || !inputPw) {
       showLoginError('아이디와 비밀번호를 입력해 주세요.');
       return;
     }
-    if (adminId !== ADMIN_ID) {
+
+    if (inputId === ADMIN_ID && inputPw === ADMIN_PW) {
+      sessionStorage.setItem(SESSION_KEY, '1');
+      document.getElementById('logged-in-id').textContent = ADMIN_ID;
+      showDashboard();
+    } else {
       showLoginError('아이디 또는 비밀번호가 올바르지 않습니다.');
-      return;
-    }
-
-    const btn = document.getElementById('login-btn');
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span> 로그인 중...';
-
-    const { error } = await window.db.auth.signInWithPassword({
-      email: ADMIN_EMAIL,
-      password,
-    });
-
-    if (error) {
-      showLoginError('아이디 또는 비밀번호가 올바르지 않습니다.');
-      btn.disabled = false;
-      btn.innerHTML = '로그인';
     }
   });
 
   // 로그아웃
-  document.getElementById('logout-btn').addEventListener('click', async () => {
-    await window.db.auth.signOut();
+  document.getElementById('logout-btn').addEventListener('click', () => {
+    sessionStorage.removeItem(SESSION_KEY);
+    showLoginScreen();
   });
 }
 
@@ -89,10 +63,10 @@ function showLoginError(msg) {
   document.getElementById('login-error').textContent = msg;
 }
 
-async function showDashboard() {
+function showDashboard() {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('admin-dashboard').style.display = 'flex';
-  await loadDashboardData();
+  loadDashboardData();
 }
 
 /* ================================================================
