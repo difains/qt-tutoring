@@ -253,7 +253,7 @@ input, textarea, select {
   position: fixed;
   inset: 0;
   background: var(--navy-900);
-  z-index: 999;
+  z-index: 1001;   /* navbar(1000)보다 위에 위치 */
   flex-direction: column;
   align-items: center;
   justify-content: center;
