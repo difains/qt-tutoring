@@ -25,6 +25,9 @@ jobs:
           echo "window.SUPABASE_URL = '${SUPABASE_URL}';" >> js/config.js
           echo "window.SUPABASE_ANON_KEY = '${SUPABASE_ANON_KEY}';" >> js/config.js
 
+      - name: 🗑️ Remove .gitignore so config.js is included in deploy
+        run: rm -f .gitignore
+
       - name: 🚀 Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
