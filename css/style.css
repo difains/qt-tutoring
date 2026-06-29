@@ -334,7 +334,7 @@ input, textarea, select {
 .hero-content {
   position: relative;
   z-index: 1;
-  padding: 7rem 0 4rem;
+  padding: 7rem 1.25rem 4rem;   /* 좌우 1.25rem 필수 — .container와 같은 요소라 padding 직접 지정 */
 }
 .hero-badge {
   display: inline-flex;
@@ -1267,7 +1267,7 @@ footer {
   .hamburger { display: flex; }
 
   /* 히어로 상단 여백 최소화 */
-  .hero-content { padding: 5.5rem 0 3rem; }
+  .hero-content { padding: 5.5rem 1.25rem 3rem; }
 
   .about-grid { grid-template-columns: 1fr; gap: 2rem; }
   .about-features { grid-template-columns: 1fr; }
