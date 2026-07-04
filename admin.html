@@ -109,6 +109,15 @@
           <div class="admin-stat-label">수업 신청 (매칭)</div>
           <div class="admin-stat-value" id="stat-requests-matched">-</div>
         </div>
+        <div class="admin-stat-card" style="border-color:rgba(201,168,76,.3)">
+          <div class="admin-stat-label">누적 PV (전체)</div>
+          <div class="admin-stat-value" id="stat-total-pv" style="color:var(--gold-400)">-</div>
+        </div>
+      </div>
+      <!-- 최근 7일 PV -->
+      <div style="margin-top:1.25rem;padding:1.25rem;background:rgba(255,255,255,.04);border-radius:var(--radius-md);border:1px solid rgba(255,255,255,.08)">
+        <h4 style="color:var(--gold-400);font-size:.85rem;margin-bottom:.85rem">📈 최근 7일 방문자 현황</h4>
+        <ul id="pv-recent-list" style="list-style:none;display:flex;flex-direction:column;gap:.5rem;font-size:.88rem"></ul>
       </div>
       <div style="padding:1.5rem;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:var(--radius-md);margin-top:.5rem">
         <h4 style="color:var(--gold-400);font-size:.9rem;margin-bottom:.5rem">✝ QT나눔 15분 규칙 리마인더</h4>

@@ -118,18 +118,41 @@ function closeMobileSidebar() {
    ================================================================ */
 async function loadDashboardData() {
   if (!window.db) return;
-  const [r1, r2, r3, r4] = await Promise.all([
+  const [r1, r2, r3, r4, r5] = await Promise.all([
     window.db.from('tutors').select('id', { count: 'exact', head: true }).eq('is_approved', true),
     window.db.from('tutors').select('id', { count: 'exact', head: true }).eq('is_approved', false),
     window.db.from('tutee_requests').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
     window.db.from('tutee_requests').select('id', { count: 'exact', head: true }).eq('status', 'matched'),
+    window.db.from('page_views').select('view_count.sum()', { head: false }),
   ]);
   document.getElementById('stat-tutors-approved').textContent  = r1.count ?? '-';
   document.getElementById('stat-tutors-pending').textContent   = r2.count ?? '-';
   document.getElementById('stat-requests-pending').textContent = r3.count ?? '-';
   document.getElementById('stat-requests-matched').textContent = r4.count ?? '-';
+  // PV 합계
+  const totalPV = r5.data?.[0]?.sum ?? 0;
+  document.getElementById('stat-total-pv').textContent = totalPV.toLocaleString();
   document.getElementById('badge-pending').textContent  = r2.count ?? 0;
   document.getElementById('badge-requests').textContent = r3.count ?? 0;
+  // 최근 7일 PV
+  loadRecentPV();
+}
+
+async function loadRecentPV() {
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
+  const fromDate = sevenDaysAgo.toISOString().split('T')[0];
+  const { data } = await window.db
+    .from('page_views')
+    .select('visit_date, view_count')
+    .gte('visit_date', fromDate)
+    .order('visit_date', { ascending: false });
+  const el = document.getElementById('pv-recent-list');
+  if (!el) return;
+  if (!data?.length) { el.innerHTML = '<li style="color:rgba(255,255,255,.4)">아직 방문 기록이 없습니다.</li>'; return; }
+  el.innerHTML = data.map(r =>
+    `<li><span style="color:rgba(255,255,255,.5);font-size:.82rem">${r.visit_date}</span> <strong style="color:var(--gold-300)">${r.view_count.toLocaleString()} PV</strong></li>`
+  ).join('');
 }
 
 /* ================================================================
@@ -165,10 +188,12 @@ async function loadPendingTutors() {
 }
 
 async function approveTutor(id, approve) {
-  const update = approve ? { is_approved: true } : { is_active: false };
+  const update = approve
+    ? { is_approved: true, is_active: true }   // 승인 시 두 필드 모두 true
+    : { is_active: false };
   const { error } = await window.db.from('tutors').update(update).eq('id', id);
   if (error) { showToast('처리 중 오류가 발생했습니다.', 'error'); return; }
-  showToast(approve ? '✅ 튜터를 승인했습니다.' : '✅ 신청을 반려했습니다.', 'success');
+  showToast(approve ? '✅ 튜터를 승인했습니다.관리자가 는 알림 없이 메인에 바로 노출됩니다.' : '✅ 신청을 반려했습니다.', 'success');
   await loadDashboardData();
   await loadPendingTutors();
 }
