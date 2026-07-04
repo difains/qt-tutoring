@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initTuteeForm();
   initModal();
   initFAQ();
+  trackPageView();              // PV 카운트 기록
 });
 
 /* ================================================================
@@ -51,6 +52,15 @@ async function loadSettingsFromDB() {
   const instruments = data.filter(s => s.category === 'instrument').map(s => s.value);
   if (subjects.length)    window.SUBJECTS    = subjects;
   if (instruments.length) window.INSTRUMENTS = instruments;
+}
+
+/* ================================================================
+   페이지 방문 추적 (PV)
+   ================================================================ */
+async function trackPageView() {
+  if (!window.db) return;
+  const today = new Date().toISOString().split('T')[0]; // 'YYYY-MM-DD'
+  await window.db.rpc('increment_page_view', { p_date: today });
 }
 
 /* ================================================================
