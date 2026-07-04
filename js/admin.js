@@ -123,18 +123,17 @@ async function loadDashboardData() {
     window.db.from('tutors').select('id', { count: 'exact', head: true }).eq('is_approved', false),
     window.db.from('tutee_requests').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
     window.db.from('tutee_requests').select('id', { count: 'exact', head: true }).eq('status', 'matched'),
-    window.db.from('page_views').select('view_count.sum()', { head: false }),
+    window.db.from('page_views').select('view_count'),
   ]);
   document.getElementById('stat-tutors-approved').textContent  = r1.count ?? '-';
   document.getElementById('stat-tutors-pending').textContent   = r2.count ?? '-';
   document.getElementById('stat-requests-pending').textContent = r3.count ?? '-';
   document.getElementById('stat-requests-matched').textContent = r4.count ?? '-';
-  // PV 합계
-  const totalPV = r5.data?.[0]?.sum ?? 0;
-  document.getElementById('stat-total-pv').textContent = totalPV.toLocaleString();
+  const totalPV = (r5.data || []).reduce((s, r) => s + (r.view_count || 0), 0);
+  const pvEl = document.getElementById('stat-total-pv');
+  if (pvEl) pvEl.textContent = totalPV.toLocaleString();
   document.getElementById('badge-pending').textContent  = r2.count ?? 0;
   document.getElementById('badge-requests').textContent = r3.count ?? 0;
-  // 최근 7일 PV
   loadRecentPV();
 }
 
