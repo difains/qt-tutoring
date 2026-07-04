@@ -22,19 +22,30 @@ let selectedTutor = null;
    초기화
    ================================================================ */
 document.addEventListener('DOMContentLoaded', async () => {
-  initNavbar();
-  initParticles();
-  initScrollReveal();
-  initMobileMenu();
-  await loadSettingsFromDB();   // DB 설정 로드 (완료 후 폼 빌드)
-  buildCheckboxGroups();
-  buildFilterTabs();
-  loadTutors();
-  initTutorForm();
-  initTuteeForm();
-  initModal();
-  initFAQ();
-  trackPageView();              // PV 카운트 기록
+  try {
+    initNavbar();
+    initParticles();
+    initScrollReveal();
+    initMobileMenu();
+  } catch (e) { console.warn('[QT터링] UI 초기화 오류:', e); }
+
+  try { await loadSettingsFromDB(); } catch (e) { console.warn('[QT터링] 설정 로드 오류:', e); }
+
+  try {
+    buildCheckboxGroups();
+    buildFilterTabs();
+  } catch (e) { console.warn('[QT터링] 필터 빌드 오류:', e); }
+
+  try { await loadTutors(); } catch (e) { console.error('[QT터링] 튜터 로드 오류:', e); }
+
+  try {
+    initTutorForm();
+    initTuteeForm();
+    initModal();
+    initFAQ();
+  } catch (e) { console.warn('[QT터링] 폼 초기화 오류:', e); }
+
+  trackPageView();
 });
 
 /* ================================================================
