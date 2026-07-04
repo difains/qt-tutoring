@@ -138,11 +138,11 @@ function initParticles() {
    스크롤 리빌 애니메이션
    ================================================================ */
 function initScrollReveal() {
-  const observer = new IntersectionObserver(
+  window.srObserver = new IntersectionObserver(
     (entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
     { threshold: 0.12 }
   );
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  document.querySelectorAll('.reveal').forEach(el => window.srObserver.observe(el));
 }
 
 /* ================================================================
@@ -280,6 +280,11 @@ function renderTutors() {
   }
 
   grid.innerHTML = filtered.map(tutor => renderTutorCard(tutor)).join('');
+
+  // 동적 카드에 스크롤 리빌 observer 등록
+  if (window.srObserver) {
+    grid.querySelectorAll('.reveal').forEach(el => window.srObserver.observe(el));
+  }
 
   // 카드 클릭 이벤트
   grid.querySelectorAll('.tutor-card').forEach(card => {
