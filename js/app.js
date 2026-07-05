@@ -395,21 +395,77 @@ function closeModal() {
 }
 
 /* ================================================================
+   전화번호 자동 하이픈 포맷팅 유틸
+   ================================================================ */
+function formatPhoneNumber(value) {
+  const digits = value.replace(/\D/g, '').slice(0, 11);
+  if (digits.length < 4) return digits;
+  if (digits.startsWith('02')) {
+    // 서울 02 지역번호: 02-XXXX-XXXX 또는 02-XXX-XXXX
+    if (digits.length <= 6) return digits.slice(0, 2) + '-' + digits.slice(2);
+    if (digits.length <= 9) return digits.slice(0, 2) + '-' + digits.slice(2, 5) + '-' + digits.slice(5);
+    return digits.slice(0, 2) + '-' + digits.slice(2, 6) + '-' + digits.slice(6);
+  }
+  // 010/011 등 일반 휴대폰: 010-XXXX-XXXX
+  if (digits.length <= 7) return digits.slice(0, 3) + '-' + digits.slice(3);
+  if (digits.length <= 10) return digits.slice(0, 3) + '-' + digits.slice(3, 6) + '-' + digits.slice(6);
+  return digits.slice(0, 3) + '-' + digits.slice(3, 7) + '-' + digits.slice(7);
+}
+
+function bindPhoneAutoFormat(contactValueId, contactTypeRadioName) {
+  const input = document.getElementById(contactValueId);
+  if (!input) return;
+  // 전화번호 선택 시 inputmode 변경 + 자동 포맷 바인딩
+  document.querySelectorAll(`input[name="${contactTypeRadioName}"]`).forEach(radio => {
+    radio.addEventListener('change', () => {
+      if (radio.value === 'phone') {
+        input.inputMode = 'numeric';
+        input.placeholder = '010-0000-0000';
+        input.addEventListener('input', phoneInputHandler);
+      } else {
+        input.inputMode = 'text';
+        input.placeholder = '카카오 오픈채팅 링크 또는 전화번호';
+        input.removeEventListener('input', phoneInputHandler);
+      }
+    });
+  });
+  function phoneInputHandler(e) {
+    const pos = e.target.selectionStart;
+    const prevLen = e.target.value.length;
+    e.target.value = formatPhoneNumber(e.target.value);
+    // 커서 위치 유지 (포맷 문자 길이 변화 반영)
+    const diff = e.target.value.length - prevLen;
+    try { e.target.setSelectionRange(pos + diff, pos + diff); } catch (_) {}
+  }
+}
+
+/* ================================================================
    튜터 신청 폼
    ================================================================ */
 function initTutorForm() {
   const form = document.getElementById('tutor-form');
   if (!form) return;
 
-  // 이미지 미리보기
+  // 전화번호 자동 하이픈
+  bindPhoneAutoFormat('tutor-contact-value', 'tutor_contact_type');
+
+  // 이미지 미리보기 + 용량 검사
   const imageInput = document.getElementById('tutor-image');
   const preview = document.getElementById('image-preview');
   const uploadText = document.getElementById('upload-text');
   imageInput?.addEventListener('change', e => {
     const file = e.target.files[0];
     if (!file) return;
+    // 파일 타입 검사
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+      showToast('JPG, PNG, WEBP 형식의 이미지만 업로드 가능합니다.', 'error');
+      imageInput.value = '';
+      return;
+    }
+    // 5MB 용량 검사 (모바일/PC 동일 메시지)
     if (file.size > 5 * 1024 * 1024) {
-      showToast('이미지 파일은 5MB 이하로 올려주세요.', 'error');
+      const mb = (file.size / 1024 / 1024).toFixed(1);
+      showToast(`이미지가 너무 큽니다 (${mb}MB). 5MB 이하 파일로 다시 선택해 주세요.`, 'error');
       imageInput.value = '';
       return;
     }
@@ -419,6 +475,7 @@ function initTutorForm() {
       preview.style.display = 'block';
       uploadText.style.display = 'none';
     };
+    reader.onerror = () => showToast('이미지를 읽는 중 오류가 발생했습니다. 다른 파일을 시도해 주세요.', 'error');
     reader.readAsDataURL(file);
   });
 
@@ -539,7 +596,13 @@ async function submitTutorForm() {
 
   } catch (err) {
     console.error('[QT터링] 튜터 신청 실패:', err);
-    showToast('신청 중 오류가 발생했습니다. 다시 시도해 주세요.', 'error');
+    // 이미지 업로드 실패인지 DB 저장 실패인지 구분
+    const isStorageErr = err?.message?.includes('storage') || err?.statusCode === 400 || err?.error === 'Payload Too Large';
+    if (isStorageErr) {
+      showToast('📷 프로필 사진 업로드에 실패했습니다. 사진 없이 신청하거나, 5MB 이하 JPG/PNG 파일로 다시 시도해 주세요.', 'error');
+    } else {
+      showToast(`신청 중 오류가 발생했습니다: ${err?.message || '알 수 없는 오류'}. 다시 시도해 주세요.`, 'error');
+    }
   } finally {
     submitBtn.disabled = false;
     submitBtn.innerHTML = '튜터 신청서 제출하기 →';
@@ -555,6 +618,9 @@ function initTuteeForm() {
 
   // 튜터 선택 옵션 채우기
   populateTutorSelect();
+
+  // 전화번호 자동 하이픈
+  bindPhoneAutoFormat('tutee-contact-value', 'tutee_contact_type');
 
   form.addEventListener('submit', async e => {
     e.preventDefault();
