@@ -238,6 +238,10 @@ async function loadAllTutors() {
 }
 
 async function toggleTutorActive(id, active) {
+  if (!active) {
+    const ok = confirm('이 튜터를 비활성화하면 메인 사이트에서 즉시 숨겨집니다.\n정말 비활성화하시겠습니까?');
+    if (!ok) return;
+  }
   const { error } = await window.db.from('tutors').update({ is_active: active }).eq('id', id);
   if (error) { showToast('처리 중 오류가 발생했습니다.', 'error'); return; }
   showToast(`✅ 튜터를 ${active ? '활성화' : '비활성화'}했습니다.`, 'success');
