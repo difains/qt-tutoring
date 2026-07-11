@@ -449,42 +449,13 @@ function initTutorForm() {
   // 전화번호 자동 하이픈
   bindPhoneAutoFormat('tutor-contact-value', 'tutor_contact_type');
 
-  // 이미지 미리보기 + 용량 검사
-  const imageInput = document.getElementById('tutor-image');
-  const preview = document.getElementById('image-preview');
-  const uploadText = document.getElementById('upload-text');
-  imageInput?.addEventListener('change', e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    // 파일 타입 검사
-    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
-      showToast('JPG, PNG, WEBP 형식의 이미지만 업로드 가능합니다.', 'error');
-      imageInput.value = '';
-      return;
-    }
-    // 5MB 용량 검사 (모바일/PC 동일 메시지)
-    if (file.size > 5 * 1024 * 1024) {
-      const mb = (file.size / 1024 / 1024).toFixed(1);
-      showToast(`이미지가 너무 큽니다 (${mb}MB). 5MB 이하 파일로 다시 선택해 주세요.`, 'error');
-      imageInput.value = '';
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = ev => {
-      preview.src = ev.target.result;
-      preview.style.display = 'block';
-      uploadText.style.display = 'none';
-    };
-    reader.onerror = () => showToast('이미지를 읽는 중 오류가 발생했습니다. 다른 파일을 시도해 주세요.', 'error');
-    reader.readAsDataURL(file);
-  });
-
   form.addEventListener('submit', async e => {
     e.preventDefault();
     if (!validateTutorForm()) return;
     await submitTutorForm();
   });
 }
+
 
 function validateTutorForm() {
   let valid = true;
@@ -551,25 +522,6 @@ async function submitTutorForm() {
   submitBtn.innerHTML = '<span class="spinner"></span> 제출 중...';
 
   try {
-    let profile_image_url = null;
-
-    // 이미지 업로드
-    const imageFile = document.getElementById('tutor-image')?.files[0];
-    if (imageFile) {
-      const ext = imageFile.name.split('.').pop();
-      const filename = `${crypto.randomUUID()}.${ext}`;
-      const { data: uploadData, error: uploadError } = await window.db.storage
-        .from('tutor-profiles')
-        .upload(filename, imageFile, { upsert: false });
-
-      if (uploadError) throw uploadError;
-
-      const { data: urlData } = window.db.storage
-        .from('tutor-profiles')
-        .getPublicUrl(filename);
-      profile_image_url = urlData.publicUrl;
-    }
-
     const payload = {
       name: document.getElementById('tutor-name').value.trim(),
       university: document.getElementById('tutor-university').value.trim(),
@@ -581,7 +533,7 @@ async function submitTutorForm() {
       contact_type: document.querySelector('input[name="tutor_contact_type"]:checked')?.value,
       contact_value: document.getElementById('tutor-contact-value').value.trim(),
       bio: document.getElementById('tutor-bio').value.trim(),
-      profile_image_url,
+      profile_image_url: null,
       qt_agreement: true,
     };
 
@@ -590,19 +542,11 @@ async function submitTutorForm() {
 
     showToast('✅ 튜터 신청이 완료되었습니다! 관리자 승인 후 리스트에 표시됩니다.', 'success');
     document.getElementById('tutor-form').reset();
-    document.getElementById('image-preview').style.display = 'none';
-    document.getElementById('upload-text').style.display = 'block';
     toggleInstrumentSection();
 
   } catch (err) {
     console.error('[QT터링] 튜터 신청 실패:', err);
-    // 이미지 업로드 실패인지 DB 저장 실패인지 구분
-    const isStorageErr = err?.message?.includes('storage') || err?.statusCode === 400 || err?.error === 'Payload Too Large';
-    if (isStorageErr) {
-      showToast('📷 프로필 사진 업로드에 실패했습니다. 사진 없이 신청하거나, 5MB 이하 JPG/PNG 파일로 다시 시도해 주세요.', 'error');
-    } else {
-      showToast(`신청 중 오류가 발생했습니다: ${err?.message || '알 수 없는 오류'}. 다시 시도해 주세요.`, 'error');
-    }
+    showToast(`신청 중 오류가 발생했습니다: ${err?.message || '알 수 없는 오류'}. 다시 시도해 주세요.`, 'error');
   } finally {
     submitBtn.disabled = false;
     submitBtn.innerHTML = '튜터 신청서 제출하기 →';
