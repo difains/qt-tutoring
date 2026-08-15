@@ -1,10 +1,5 @@
-// js/admin.js — QT터링 관리자 패널 로직 v2
+// js/admin.js — QT터링 관리자 패널 로직 v3
 
-/* ================================================================
-   상수 — 관리자 자격증명
-   ================================================================ */
-const ADMIN_ID  = 'admin0421';
-const ADMIN_PW  = '121212';
 const SESSION_KEY = 'qt_admin_session';
 
 /* ================================================================
@@ -18,38 +13,55 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ================================================================
-   인증 (순수 클라이언트 세션 방식)
+   인증 (Supabase Auth 방식)
    ================================================================ */
 async function initAuth() {
+  if (!window.db) {
+    showLoginError('데이터베이스 연결이 필요합니다. 관리자에게 문의하세요.');
+    return;
+  }
+
   // 기존 세션 확인
-  if (sessionStorage.getItem(SESSION_KEY) === '1') {
-    document.getElementById('logged-in-id').textContent = ADMIN_ID;
+  const { data: { session } } = await window.db.auth.getSession();
+  if (session) {
+    const email = session.user?.email ?? '';
+    document.getElementById('logged-in-id').textContent = email;
     showDashboard();
   }
 
   // 로그인 폼
-  document.getElementById('login-form').addEventListener('submit', e => {
+  document.getElementById('login-form').addEventListener('submit', async e => {
     e.preventDefault();
-    const inputId = document.getElementById('admin-id').value.trim();
-    const inputPw = document.getElementById('admin-password').value;
+    const email = document.getElementById('admin-email').value.trim();
+    const password = document.getElementById('admin-password').value;
 
-    if (!inputId || !inputPw) {
-      showLoginError('아이디와 비밀번호를 입력해 주세요.');
+    if (!email || !password) {
+      showLoginError('이메일과 비밀번호를 입력해 주세요.');
       return;
     }
 
-    if (inputId === ADMIN_ID && inputPw === ADMIN_PW) {
-      sessionStorage.setItem(SESSION_KEY, '1');
-      document.getElementById('logged-in-id').textContent = ADMIN_ID;
-      showDashboard();
-    } else {
-      showLoginError('아이디 또는 비밀번호가 올바르지 않습니다.');
+    const btn = document.getElementById('login-btn');
+    btn.disabled = true;
+    btn.textContent = '로그인 중...';
+
+    const { data, error } = await window.db.auth.signInWithPassword({ email, password });
+
+    btn.disabled = false;
+    btn.textContent = '로그인';
+
+    if (error || !data.session) {
+      showLoginError('이메일 또는 비밀번호가 올바르지 않습니다.');
+      return;
     }
+
+    document.getElementById('logged-in-id').textContent = email;
+    showLoginError('');
+    showDashboard();
   });
 
   // 로그아웃
-  document.getElementById('logout-btn').addEventListener('click', () => {
-    sessionStorage.removeItem(SESSION_KEY);
+  document.getElementById('logout-btn').addEventListener('click', async () => {
+    await window.db.auth.signOut();
     showLoginScreen();
   });
 }

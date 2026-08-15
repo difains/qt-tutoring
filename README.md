@@ -1,7 +1,7 @@
-# QT터링 "지혜를 잇다" — 배포 가이드
+﻿# QT터링 "지혜를 잇다" — 배포 가이드
 
 > 서울중앙교회 대학/청년부 튜터링 플랫폼  
-> GitHub Pages + Supabase 기반 무료 운영
+> Vercel + Supabase 기반 운영
 
 ---
 
@@ -23,6 +23,8 @@
 2. 이메일: `difains2@gmail.com`
 3. 비밀번호 설정 (안전한 비밀번호 사용)
 
+> ⚠️ 관리자 이메일/비밀번호는 Supabase에서만 관리됩니다. 소스 코드에 포함되지 않습니다.
+
 ### 1-4. 프로젝트 키 확인
 1. **Settings** → **API**
 2. `Project URL` 복사해두기
@@ -32,66 +34,47 @@
 
 ---
 
-## 2단계 — GitHub 저장소 설정
+## 2단계 — Vercel 배포
 
-### 2-1. 저장소 생성
-1. GitHub에서 새 저장소 생성 (예: `qt-tutoring`)
-2. **Public** 또는 **Private** (GitHub Pages는 Public 추천)
+### 2-1. GitHub 저장소 연결
+1. [Vercel](https://vercel.com) 로그인
+2. **Add New Project** → GitHub 저장소 선택 (`qt-tutoring`)
+3. Framework Preset: **Other**
 
-### 2-2. 코드 푸시
-```bash
-cd qt-tutoring
-git init
-git add .
-git commit -m "초기 커밋 — QT터링 랜딩 페이지"
-git remote add origin https://github.com/[내-계정]/qt-tutoring.git
-git push -u origin main
-```
-
-### 2-3. GitHub Secrets 설정 (⚠️ 핵심 보안 단계)
-1. 저장소 → **Settings** → **Secrets and variables** → **Actions**
-2. **New repository secret** 클릭 후 2개 추가:
+### 2-2. 환경 변수 설정 ⚠️ 핵심
+Vercel 프로젝트 → **Settings** → **Environment Variables** 에서 추가:
 
 | Name | Value |
 |------|-------|
 | `SUPABASE_URL` | Supabase Project URL |
 | `SUPABASE_ANON_KEY` | Supabase anon public 키 |
 
-### 2-4. GitHub Pages 활성화
-1. 저장소 → **Settings** → **Pages**
-2. Source: **Deploy from a branch**
-3. Branch: **gh-pages** / **/ (root)**
-4. **Save**
+### 2-3. 빌드 설정 확인
+- Build Command: `npm run build`
+- Output Directory: `.`
+- (vercel.json에 이미 설정되어 있어 자동 적용됩니다)
 
-### 2-5. 배포 트리거
-- `main` 브랜치에 push할 때마다 자동 배포
-- 또는 **Actions** → **Deploy QT터링** → **Run workflow**로 수동 배포
+### 2-4. 배포
+- **Deploy** 클릭 → 자동으로 빌드 및 배포
 
 ---
 
-## 3단계 — 로컬 개발 환경 설정
+## 3단계 — 로컬 개발
 
 ```bash
-# config.js 생성 (gitignore 처리됨)
-cp js/config.example.js js/config.js
-```
-
-`js/config.js` 파일을 열어 실제 키 값 입력:
-```javascript
-window.SUPABASE_URL = 'https://your-project-id.supabase.co';
-window.SUPABASE_ANON_KEY = 'your-anon-key-here';
+# 환경 변수를 직접 설정하여 config.js 생성
+$env:SUPABASE_URL="https://your-project-id.supabase.co"
+$env:SUPABASE_ANON_KEY="your-anon-key-here"
+npm run build
 ```
 
 로컬 서버 실행 (파일을 직접 열면 CORS 오류 발생):
 ```bash
-# Python이 있는 경우
-python -m http.server 8080
-
 # Node.js가 있는 경우
 npx serve .
 ```
 
-브라우저에서 `http://localhost:8080` 접속
+브라우저에서 `http://localhost:3000` 접속
 
 ---
 
@@ -101,29 +84,35 @@ npx serve .
 qt-tutoring/
 ├── index.html              # 메인 랜딩 페이지
 ├── admin.html              # 관리자 패널
+├── vercel.json             # Vercel 배포 설정 + 보안 헤더
+├── package.json            # 빌드 스크립트 정의
+├── scripts/
+│   └── generate-config.js  # 환경 변수 → js/config.js 생성
 ├── css/
 │   ├── style.css           # 메인 스타일
 │   └── admin.css           # 관리자 스타일
 ├── js/
-│   ├── config.js           # ⚠️ .gitignore (로컬/CI 생성)
+│   ├── config.js           # ⚠️ .gitignore (빌드 시 자동 생성)
 │   ├── config.example.js   # 예시 파일 (커밋됨)
 │   ├── supabase-client.js  # Supabase 초기화
 │   ├── app.js              # 메인 앱 로직
-│   └── admin.js            # 관리자 패널 로직
+│   └── admin.js            # 관리자 패널 로직 (v3 — Supabase Auth)
 ├── supabase/
 │   └── schema.sql          # DB 스키마 + RLS 정책
-├── .github/
-│   └── workflows/
-│       └── deploy.yml      # GitHub Actions 자동 배포
 ├── .gitignore
 └── README.md
 ```
 
 ---
 
-## 관리자 패널 사용법
+## 관리자 패널 접속
 
-**접속 URL:** `https://[계정].github.io/qt-tutoring/admin.html`
+**접속 URL:** `https://[프로젝트명].vercel.app/admin`
+
+**로그인:** Supabase Authentication에 등록된 이메일 + 비밀번호
+
+> 관리자 자격증명은 소스 코드에 포함되지 않습니다.
+> Supabase Dashboard → Authentication → Users 에서 관리하세요.
 
 ### 기능
 | 메뉴 | 설명 |
@@ -138,8 +127,11 @@ qt-tutoring/
 
 ## 보안 체크리스트
 
-- [ ] `js/config.js`가 `.gitignore`에 포함되어 있는가
-- [ ] GitHub Secrets에 키가 등록되어 있는가
+- [x] `js/config.js`가 `.gitignore`에 포함
+- [x] 관리자 자격증명이 소스 코드에 없음 (Supabase Auth 사용)
+- [x] Vercel 환경 변수로 Supabase 키 관리
+- [x] 보안 HTTP 헤더 (X-Frame-Options, CSP 등) 적용
+- [x] Supabase RLS 정책 활성화
 - [ ] `service_role` 키를 어디에도 넣지 않았는가
 - [ ] Supabase RLS 정책이 활성화되어 있는가
 - [ ] Storage 버킷 RLS 정책이 설정되어 있는가
